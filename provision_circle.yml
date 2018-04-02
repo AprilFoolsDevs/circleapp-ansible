@@ -1,0 +1,11 @@
+# Setup Ansible requirements
+- hosts: all_hosts
+  gather_facts: false
+  become: true
+  roles:
+    - role: bootstrap_ansible
+
+- hosts: all_hosts
+  become: true
+  roles:
+    - role: setup_app

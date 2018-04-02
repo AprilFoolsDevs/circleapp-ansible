@@ -1,0 +1,13 @@
+[Service]
+WorkingDirectory=/app/
+ExecStart=/usr/bin/npm start
+Restart=always
+User=root
+Group=root
+SyslogIdentifier=circleapp
+StandardOutput=syslog
+StandardError=syslog
+Environment="NODE_ENV=production"
+
+[Install]
+WantedBy=multi-user.target

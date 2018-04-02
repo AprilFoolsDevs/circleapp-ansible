@@ -1,0 +1,43 @@
+---
+- name: "App - Install Node"
+  apt:
+    name: '{{ item }}'
+    state: present
+    update_cache: yes
+    cache_valid_time: 172800
+  with_items:
+    - build-essential
+    - nodejs
+    - nodejs-legacy
+
+- name: "App - Update repo."
+  git:
+    repo: https://github.com/opl-/reddit-circle-listener.git
+    dest: /app
+
+- name: "App - Install package.json."
+  npm:
+    path: /app
+
+- name: "App - Update systemd run script"
+  copy:
+    src: systemd_service
+    dest: /etc/systemd/system/circleapp.service
+    mode: 0644
+    owner: 'root'
+    group: 'root'
+
+- name: "App - Update app config"
+  copy:
+    src: config_production.json
+    dest: /app/config/config.production.json
+    mode: 0644
+    owner: 'root'
+    group: 'root'
+
+- name: "App - Update systemd daemon configuration and restart app"
+  systemd:
+    name: circleapp
+    enabled: true
+    state: restarted
+    daemon_reload: yes
